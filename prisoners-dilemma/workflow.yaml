@@ -1,0 +1,73 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: prisoner-dilemma-
+spec:
+  entrypoint: main
+  arguments:
+    parameters:
+    - name: strategy_type
+      value: "titfortat"  # random, titfortat, always_cooperate, always_defect
+    - name: cooperate_prob
+      value: "0.5"        # determines how often a "random" strategy cooperates 1.0 always, 0.0 never
+
+  templates:
+  - name: main
+    dag:
+      tasks:
+      - name: train-model
+        template: train-model
+        arguments:
+          parameters:
+          - name: strategy_type
+            value: "{{workflow.parameters.strategy_type}}"
+          - name: cooperate_prob
+            value: "{{workflow.parameters.cooperate_prob}}"
+      
+      - name: evaluate-model
+        template: evaluate-model
+        depends: train-model
+        arguments:
+          parameters:
+          - name: strategy_type
+            value: "{{workflow.parameters.strategy_type}}"
+          - name: cooperate_prob
+            value: "{{workflow.parameters.cooperate_prob}}"
+          artifacts:
+          - name: q-table
+            from: "{{tasks.train-model.outputs.artifacts.q-table}}"
+
+  - name: train-model
+    inputs:
+      parameters:
+      - name: strategy_type
+      - name: cooperate_prob
+    outputs:
+      artifacts:
+      - name: q-table
+        path: /tmp/qtable.pkl
+    container:
+      image: python:3.9-slim  # Replace with your custom image if needed
+      command: [python, "/app/train.py"]
+      args: [
+        "--strategy_type", "{{inputs.parameters.strategy_type}}",
+        "--cooperate_prob", "{{inputs.parameters.cooperate_prob}}",
+        "--output", "/tmp/qtable.pkl"
+      ]
+
+  - name: evaluate-model
+    inputs:
+      parameters:
+      - name: strategy_type
+      - name: cooperate_prob
+      artifacts:
+      - name: q-table
+        path: /tmp/qtable.pkl
+    container:
+      image: python:3.9-slim  # Replace with your custom image if needed
+      command: [python, "/app/evaluate.py"]
+      args: [
+        "--strategy_type", "{{inputs.parameters.strategy_type}}",
+        "--cooperate_prob", "{{inputs.parameters.cooperate_prob}}",
+        "--q_table", "/tmp/qtable.pkl"
+      ]
