@@ -8,7 +8,7 @@ This project trains an AI agent to play the Prisoner's Dilemma using Q-learning.
 * Always Cooperate
 * Always Defect
 
-For more information please refer to the [Blog post on my website](https://danielbooth.cloud/building-a-q-learning-agent-for-game-theory-with-argo-workflows/ "blog post on my website")
+For more information, please refer to the [blog post on my website](https://danielbooth.cloud/building-a-q-learning-agent-for-game-theory-with-argo-workflows/ "blog post on my website")
 
 ### Prerequisites
 * Kubernetes cluster
