@@ -141,5 +141,5 @@ if __name__ == "__main__":
     print(report_str)
     
     # Save to file
-    with open(args.output, 'w') as f:
+    with open(args.output, 'w', encoding='utf-8') as f:  # Add encoding parameter
         f.write(report_str)

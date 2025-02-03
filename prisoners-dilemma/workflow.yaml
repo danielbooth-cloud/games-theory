@@ -47,7 +47,7 @@ spec:
       - name: q-table
         path: /tmp/qtable.pkl
     container:
-      image: danielboothcloud/prisoners-dilemma:v1.1
+      image: danielboothcloud/prisoners-dilemma:v1.2
       imagePullPolicy: Always
       command: [python, "/app/train.py"]
       args: [
@@ -71,7 +71,7 @@ spec:
         archive:
           none: {} 
     container:
-      image: danielboothcloud/prisoners-dilemma:v1.1
+      image: danielboothcloud/prisoners-dilemma:v1.2
       imagePullPolicy: Always
       command: [python, "/app/evaluate.py"]
       args: [
