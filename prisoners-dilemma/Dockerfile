@@ -7,8 +7,8 @@ WORKDIR /app
 # Install numpy directly
 RUN pip install --no-cache-dir numpy
 
-# Copy training script
-COPY train.py .
+# Copy script
+COPY train.py evaluate.py .
 
 # Set the entrypoint
-ENTRYPOINT ["python", "train.py"]
+ENTRYPOINT ["python"]

@@ -7,9 +7,9 @@ spec:
   arguments:
     parameters:
     - name: strategy_type
-      value: "titfortat"  # random, titfortat, always_cooperate, always_defect
+      value: "titfortat"  # Options: random, titfortat, always_cooperate, always_defect
     - name: cooperate_prob
-      value: "0.5"        # determines how often a "random" strategy cooperates 1.0 always, 0.0 never
+      value: "0.5"        # Determines how often a "random" strategy cooperates (1.0 = always, 0.0 = never)
 
   templates:
   - name: main
@@ -47,7 +47,8 @@ spec:
       - name: q-table
         path: /tmp/qtable.pkl
     container:
-      image: python:3.9-slim  # Replace with your custom image if needed
+      image: danielboothcloud/prisoners-dilemma:v1
+      imagePullPolicy: Always
       command: [python, "/app/train.py"]
       args: [
         "--strategy_type", "{{inputs.parameters.strategy_type}}",
@@ -64,7 +65,8 @@ spec:
       - name: q-table
         path: /tmp/qtable.pkl
     container:
-      image: python:3.9-slim  # Replace with your custom image if needed
+      image: danielboothcloud/prisoners-dilemma:v1
+      imagePullPolicy: Always
       command: [python, "/app/evaluate.py"]
       args: [
         "--strategy_type", "{{inputs.parameters.strategy_type}}",
